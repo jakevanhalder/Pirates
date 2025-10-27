@@ -1,0 +1,78 @@
+extends Node3D
+
+# Parameters for Camera Control
+@export_range(0, 1000) var movement_speed: float = 64
+@export_range(0, 1000) var rotation_speed: float = 5
+@export_range(0, 1000, 0.1) var zoom_speed: float = 50
+@export_range(0, 1000) var min_zoom: float = 15
+@export_range(0, 1000) var max_zoom: float = 256
+@export_range(0, 90) var min_elevation_angle: float = 10
+@export_range(0, 90) var max_elevation_angle: float = 90
+@export var edge_margin: float = 50
+@export var allow_zoom: bool = true
+
+# Camera Nodes
+@onready var camera = $Elevation/Camera3D
+@onready var elevation_node = $Elevation
+
+# Runtime State
+var last_mouse_position: Vector2
+var zoom_level: float = 64
+
+func _ready() -> void:
+	# Initialize zoom level
+	zoom_level = camera.position.y
+
+func _process(delta: float) -> void:
+	handle_edge_movement(delta)
+	handle_keyboard_movement(delta)
+	if allow_zoom:
+		handle_zoom(delta)
+
+# handling inputs
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("zoom_in"):
+		zoom_level -= zoom_speed
+	elif event.is_action_pressed("zoom_out"):
+		zoom_level += zoom_speed
+
+# Movement
+func handle_keyboard_movement(delta: float) -> void:
+	var direction = Vector3.ZERO
+	if Input.is_action_pressed("ui_up"):
+		direction.z -= 1
+	if Input.is_action_pressed("ui_down"):
+		direction.z += 1
+	if Input.is_action_pressed("ui_left"):
+		direction.x -= 1
+	if Input.is_action_pressed("ui_right"):
+		direction.x += 1
+
+	if direction != Vector3.ZERO:
+		direction = direction.normalized()
+		global_translate(direction * movement_speed * delta)
+
+func handle_edge_movement(delta: float) -> void:
+	var viewport = get_viewport()
+	var mouse_pos = viewport.get_mouse_position()
+	var screen_rect = viewport.get_visible_rect()
+	var direction = Vector3.ZERO
+
+	if mouse_pos.x < edge_margin:
+		direction.x += 1
+	elif mouse_pos.x > screen_rect.size.x - edge_margin:
+		direction.x -= 1
+
+	if mouse_pos.y < edge_margin:
+		direction.z += 1
+	elif mouse_pos.y > screen_rect.size.y - edge_margin:
+		direction.z -= 1
+
+	if direction != Vector3.ZERO:
+		direction = direction.normalized()
+		global_translate(direction * movement_speed * delta)
+
+# Zoom
+func handle_zoom(delta: float) -> void:
+	zoom_level = clamp(zoom_level, min_zoom, max_zoom)
+	camera.position.y = lerp(camera.position.y, zoom_level, 0.1)

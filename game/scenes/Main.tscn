@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://bmb84q275kof3"]
+[gd_scene load_steps=3 format=3 uid="uid://bmb84q275kof3"]
 
-[node name="Node2D" type="Node2D"]
+[ext_resource type="PackedScene" uid="uid://obm26pf37jqd" path="res://scenes/RTSCamera.tscn" id="1_37nm4"]
+[ext_resource type="PackedScene" uid="uid://dveuujr8dipfx" path="res://assets/models/GLB/ship-small.glb" id="1_s2pcw"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="RtsCamera" parent="." instance=ExtResource("1_37nm4")]
+
+[node name="ship-small2" parent="." instance=ExtResource("1_s2pcw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0131227, 0, 0.13465)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 22.4157, 0)
