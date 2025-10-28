@@ -1,14 +1,14 @@
 extends Node3D
 
 # Parameters for Camera Control
-@export_range(0, 1000) var movement_speed: float = 64
-@export_range(0, 1000) var rotation_speed: float = 5
-@export_range(0, 1000, 0.1) var zoom_speed: float = 50
-@export_range(0, 1000) var min_zoom: float = 15
-@export_range(0, 1000) var max_zoom: float = 256
-@export_range(0, 90) var min_elevation_angle: float = 10
-@export_range(0, 90) var max_elevation_angle: float = 90
-@export var edge_margin: float = 50
+@export_range(0, 1000) var movement_speed: float = 5.0
+@export_range(0, 1000) var rotation_speed: float = 5.0
+@export_range(0, 1000, 0.1) var zoom_speed: float = 50.0
+@export_range(0, 1000) var min_zoom: float = 1.0
+@export_range(0, 1000) var max_zoom: float = 8.0
+@export_range(0, 90) var min_elevation_angle: float = 10.0
+@export_range(0, 90) var max_elevation_angle: float = 90.0
+@export var edge_margin: float = 50.0
 @export var allow_zoom: bool = true
 
 # Camera Nodes
@@ -17,7 +17,7 @@ extends Node3D
 
 # Runtime State
 var last_mouse_position: Vector2
-var zoom_level: float = 64
+var zoom_level: float = 5
 
 func _ready() -> void:
 	# Initialize zoom level
@@ -40,13 +40,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func handle_keyboard_movement(delta: float) -> void:
 	var direction = Vector3.ZERO
 	if Input.is_action_pressed("ui_up"):
-		direction.z -= 1
-	if Input.is_action_pressed("ui_down"):
 		direction.z += 1
+	if Input.is_action_pressed("ui_down"):
+		direction.z -= 1
 	if Input.is_action_pressed("ui_left"):
-		direction.x -= 1
-	if Input.is_action_pressed("ui_right"):
 		direction.x += 1
+	if Input.is_action_pressed("ui_right"):
+		direction.x -= 1
 
 	if direction != Vector3.ZERO:
 		direction = direction.normalized()

@@ -1,14 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmb84q275kof3"]
+[gd_scene load_steps=4 format=3 uid="uid://bmb84q275kof3"]
 
 [ext_resource type="PackedScene" uid="uid://obm26pf37jqd" path="res://scenes/RTSCamera.tscn" id="1_37nm4"]
+[ext_resource type="PackedScene" uid="uid://i63cnj8gkumo" path="res://scenes/WaterPlane.tscn" id="1_ikrn6"]
 [ext_resource type="PackedScene" uid="uid://dveuujr8dipfx" path="res://assets/models/GLB/ship-small.glb" id="1_s2pcw"]
 
 [node name="Node3D" type="Node3D"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.642788, -0.541675, 0.541675, 0, 0.707107, 0.707107, -0.766044, -0.454519, 0.454519, 0, 1, 0)
+
+[node name="WaterPlane" parent="." instance=ExtResource("1_ikrn6")]
+
 [node name="RtsCamera" parent="." instance=ExtResource("1_37nm4")]
 
-[node name="ship-small2" parent="." instance=ExtResource("1_s2pcw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0131227, 0, 0.13465)
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 22.4157, 0)
+[node name="PlayerShip" parent="." instance=ExtResource("1_s2pcw")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0.0131227, 0.0484625, 0.13465)
