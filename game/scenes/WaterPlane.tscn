@@ -1,14 +1,125 @@
-[gd_scene load_steps=3 format=3 uid="uid://i63cnj8gkumo"]
+[gd_scene load_steps=4 format=3 uid="uid://i63cnj8gkumo"]
 
 [ext_resource type="Material" uid="uid://b5lanvs08jrq7" path="res://shaders/Water.tres" id="1_0lo0w"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_52n13"]
-size = Vector2(100, 100)
-subdivide_width = 200
-subdivide_depth = 200
+lightmap_size_hint = Vector2i(127, 127)
+size = Vector2(25, 25)
+subdivide_width = 500
+subdivide_depth = 500
 orientation = 1
+
+[sub_resource type="GDScript" id="GDScript_v2vvu"]
+script/source = "# hybrid_noise_blend.gd
+extends MeshInstance3D
+
+@export_range(0.0, 1.0, 0.01) var initial_blend := 0.0
+@export var regen_min_interval := 12.0
+@export var regen_max_interval := 30.0
+@export var tex_size := 512
+@export var bump_low := 0.0
+@export var bump_high := 5.0
+
+var mat: ShaderMaterial
+var tex_low: NoiseTexture2D
+var tex_high: NoiseTexture2D
+
+func _ready() -> void:
+	randomize()
+	mat = _find_shader_material()
+	if mat == null:
+		push_warning(\"No ShaderMaterial found on this MeshInstance3D.\")
+		return
+
+	# start initialization deferred so _ready can finish immediately
+	call_deferred(\"_init_and_start\")
+
+
+func _find_shader_material() -> ShaderMaterial:
+	if material_override and material_override is ShaderMaterial:
+		return material_override
+	if mesh:
+		var surf_mat = mesh.surface_get_material(0)
+		if surf_mat and surf_mat is ShaderMaterial:
+			return surf_mat
+	return null
+
+
+func _make_noise_texture(bump_strength: float, seed: int) -> NoiseTexture2D:
+	var tex := NoiseTexture2D.new()
+	var fn := FastNoiseLite.new()
+	fn.seed = seed
+	# Correct noise type constants and fractal property names for Godot 4:
+	# Use one of: TYPE_SIMPLEX, TYPE_SIMPLEX_SMOOTH, TYPE_PERLIN, TYPE_CELLULAR, TYPE_VALUE, TYPE_VALUE_CUBIC
+	fn.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	fn.frequency = 0.5
+	# Fractal settings (correct property names)
+	fn.fractal_type = FastNoiseLite.FRACTAL_FBM
+	fn.fractal_octaves = 3
+	fn.fractal_lacunarity = 2.0
+	fn.fractal_gain = 0.5
+
+	tex.noise = fn
+	tex.width = tex_size
+	tex.height = tex_size
+	tex.as_normal_map = true
+	tex.bump_strength = bump_strength
+	tex.generate_mipmaps = true
+	return tex
+
+
+# Initial generation then start coroutine loops
+func _init_and_start() -> void:
+	# generate two textures (low and high bump) and wait for completion
+	tex_low = _make_noise_texture(bump_low, randi())
+	await tex_low.changed
+	tex_high = _make_noise_texture(bump_high, randi())
+	await tex_high.changed
+
+	# set shader parameters
+	mat.set_shader_parameter(\"texture_normalA\", tex_low)
+	mat.set_shader_parameter(\"texture_normalB\", tex_high)
+	mat.set_shader_parameter(\"normal_blend\", initial_blend)
+
+	# start the loops (deferred so they run concurrently)
+	call_deferred(\"_start_blend_loop\")
+	call_deferred(\"_start_regen_loop\")
+
+
+# Animates normal_blend continuously between random 0..1 targets
+func _start_blend_loop() -> void:
+	while is_instance_valid(self):
+		var target = randf_range(0.0, 1.0)
+		var duration = randf_range(2.5, 6.0)
+		var tw = create_tween()
+		tw.tween_property(mat, \"shader_parameter/normal_blend\", target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		await tw.finished
+		await get_tree().create_timer(randf_range(0.2, 1.2)).timeout
+
+
+# Rarely re-generate one of the two NoiseTexture2D and swap in when finished
+func _start_regen_loop() -> void:
+	while is_instance_valid(self):
+		var wait_t = randf_range(regen_min_interval, regen_max_interval)
+		await get_tree().create_timer(wait_t).timeout
+
+		# choose which texture to regenerate (0 -> low, 1 -> high)
+		var which = randi() % 2
+		var bump = bump_low if which == 0 else bump_high
+		var new_tex = _make_noise_texture(bump, randi())
+		# wait for generation to complete on background thread
+		await new_tex.changed
+		# swap it in atomically
+		if which == 0:
+			tex_low = new_tex
+			mat.set_shader_parameter(\"texture_normalA\", tex_low)
+		else:
+			tex_high = new_tex
+			mat.set_shader_parameter(\"texture_normalB\", tex_high)
+"
 
 [node name="WaterPlane" type="MeshInstance3D"]
 cast_shadow = 0
 mesh = SubResource("QuadMesh_52n13")
 surface_material_override/0 = ExtResource("1_0lo0w")
+script = SubResource("GDScript_v2vvu")
