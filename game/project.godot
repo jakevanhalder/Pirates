@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pirates!"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/game/Main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,6 +23,10 @@ window/size/viewport_height=1080
 [filesystem]
 
 import/fbx/enabled=false
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
 
 [input]
 
