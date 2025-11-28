@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccni3tahsnknh"]
+
+[ext_resource type="Script" path="res://scripts/game/LobbyButton.gd" id="1_jmggi"]
+
+[node name="ConnectionPanel" type="PanelContainer"]
+offset_right = 150.0
+offset_bottom = 66.0
+
+[node name="LobbyButton" type="Button" parent="."]
+layout_mode = 2
+text = "Lobby"
+script = ExtResource("1_jmggi")
+
+[connection signal="pressed" from="LobbyButton" to="LobbyButton" method="_on_pressed"]

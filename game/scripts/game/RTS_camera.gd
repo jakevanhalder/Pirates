@@ -1,6 +1,5 @@
 extends Node3D
 
-# Parameters for Camera Control
 @export_range(0, 1000) var movement_speed: float = 5.0
 @export_range(0, 1000) var rotation_speed: float = 5.0
 @export_range(0, 1000, 0.1) var zoom_speed: float = 50.0
@@ -11,16 +10,13 @@ extends Node3D
 @export var edge_margin: float = 50.0
 @export var allow_zoom: bool = true
 
-# Camera Nodes
 @onready var camera = $Elevation/Camera3D
 @onready var elevation_node = $Elevation
 
-# Runtime State
 var last_mouse_position: Vector2
 var zoom_level: float = 5
 
 func _ready() -> void:
-	# Initialize zoom level
 	zoom_level = camera.position.y
 
 func _process(delta: float) -> void:
@@ -29,14 +25,12 @@ func _process(delta: float) -> void:
 	if allow_zoom:
 		handle_zoom(delta)
 
-# handling inputs
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("zoom_in"):
 		zoom_level -= zoom_speed
 	elif event.is_action_pressed("zoom_out"):
 		zoom_level += zoom_speed
 
-# Movement
 func handle_keyboard_movement(delta: float) -> void:
 	var direction = Vector3.ZERO
 	if Input.is_action_pressed("ui_up"):
@@ -72,7 +66,6 @@ func handle_edge_movement(delta: float) -> void:
 		direction = direction.normalized()
 		global_translate(direction * movement_speed * delta)
 
-# Zoom
 func handle_zoom(delta: float) -> void:
 	zoom_level = clamp(zoom_level, min_zoom, max_zoom)
 	camera.position.y = lerp(camera.position.y, zoom_level, 0.1)

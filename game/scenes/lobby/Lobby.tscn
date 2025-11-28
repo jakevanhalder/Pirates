@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://chc4ueto21hvo"]
+
+[ext_resource type="Script" path="res://scripts/lobby/BackButton.gd" id="1_23dqk"]
+[ext_resource type="Script" path="res://scripts/lobby/Lobby.gd" id="1_mwgem"]
+[ext_resource type="PackedScene" uid="uid://bw7r7bd4iaccr" path="res://ui/lobby/UserNamePanel.tscn" id="2_2g8rs"]
+[ext_resource type="PackedScene" uid="uid://ddhwfnqk25qln" path="res://ui/lobby/LobbiesPanel.tscn" id="3_31ki0"]
+[ext_resource type="PackedScene" uid="uid://bpuk7rq1iel6c" path="res://ui/lobby/OutputPanel.tscn" id="4_ec85s"]
+
+[node name="Lobby" type="Node"]
+script = ExtResource("1_mwgem")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.122252, 0.122252, 0.122252, 1)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MainMenuPanel" type="PanelContainer" parent="UI"]
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 182.0
+offset_bottom = 98.0
+
+[node name="BackButton" type="Button" parent="UI/MainMenuPanel"]
+layout_mode = 2
+text = "Back"
+script = ExtResource("1_23dqk")
+
+[node name="OutputPanel" parent="UI" instance=ExtResource("4_ec85s")]
+offset_left = 728.0
+offset_top = 648.0
+offset_right = 1728.0
+offset_bottom = 948.0
+
+[node name="LobbiesPanel" parent="UI" instance=ExtResource("3_31ki0")]
+offset_left = 728.0
+offset_top = 264.0
+offset_right = 1728.0
+offset_bottom = 445.0
+
+[node name="ConnectPanel" parent="UI" instance=ExtResource("2_2g8rs")]
+offset_left = 128.0
+offset_top = 264.0
+offset_right = 395.0
+offset_bottom = 471.0
+
+[node name="TitleLabel" type="Label" parent="UI"]
+offset_left = 912.0
+offset_top = 128.0
+offset_right = 1513.0
+offset_bottom = 218.0
+theme_override_font_sizes/font_size = 64
+text = "Host or join a lobby"
+
+[connection signal="pressed" from="UI/MainMenuPanel/BackButton" to="UI/MainMenuPanel/BackButton" method="_on_pressed"]
