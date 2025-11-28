@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://pkrxla6l6bwl"]
+
+[ext_resource type="Script" path="res://scripts/lobby/LobbyEntry.gd" id="1_xrwc1"]
+
+[node name="LobbyEntry" type="PanelContainer"]
+script = ExtResource("1_xrwc1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HostNameLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="IdLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CountLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="DisconnectButton" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Leave Lobby"
+
+[node name="StartButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Start Game"

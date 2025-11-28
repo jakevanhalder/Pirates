@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ccni3tahsnknh"]
 
-[ext_resource type="Script" path="res://ui/game/LobbyButton.gd" id="1_jmggi"]
+[ext_resource type="Script" path="res://scripts/game/LobbyButton.gd" id="1_jmggi"]
 
 [node name="ConnectionPanel" type="PanelContainer"]
 offset_right = 150.0

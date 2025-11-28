@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Pirates!"
-run/main_scene="res://scenes/game/Main.tscn"
+run/main_scene="res://scenes/game/Game.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Network="*res://network/Network.gd"
 
 [display]
 

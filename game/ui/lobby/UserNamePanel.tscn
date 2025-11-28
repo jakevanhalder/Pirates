@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/lobby/ServerConnectButton.gd" id="1_5yle5"]
 
-[node name="ConnectPanel" type="PanelContainer"]
+[node name="UsernamePanel" type="PanelContainer"]
 offset_right = 200.0
 offset_bottom = 70.0
 

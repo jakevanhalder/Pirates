@@ -1,13 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://chc4ueto21hvo"]
+[gd_scene load_steps=5 format=3 uid="uid://chc4ueto21hvo"]
 
 [ext_resource type="Script" path="res://scripts/lobby/BackButton.gd" id="1_23dqk"]
-[ext_resource type="Script" path="res://scripts/lobby/Lobby.gd" id="1_mwgem"]
 [ext_resource type="PackedScene" uid="uid://bw7r7bd4iaccr" path="res://ui/lobby/UserNamePanel.tscn" id="2_2g8rs"]
 [ext_resource type="PackedScene" uid="uid://ddhwfnqk25qln" path="res://ui/lobby/LobbiesPanel.tscn" id="3_31ki0"]
 [ext_resource type="PackedScene" uid="uid://bpuk7rq1iel6c" path="res://ui/lobby/OutputPanel.tscn" id="4_ec85s"]
 
-[node name="Lobby" type="Node"]
-script = ExtResource("1_mwgem")
+[node name="Lobby" type="Node2D"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 1920.0
@@ -39,7 +37,7 @@ offset_top = 264.0
 offset_right = 1728.0
 offset_bottom = 445.0
 
-[node name="ConnectPanel" parent="UI" instance=ExtResource("2_2g8rs")]
+[node name="UsernamePanel" parent="UI" instance=ExtResource("2_2g8rs")]
 offset_left = 128.0
 offset_top = 264.0
 offset_right = 395.0
