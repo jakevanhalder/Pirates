@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8uj7idrk2c1u"]
+
+[ext_resource type="Script" path="res://scripts/player/CannonBall.gd" id="1_pf13q"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_dhjme"]
+
+[node name="CannonBall" type="RayCast3D"]
+top_level = true
+script = ExtResource("1_pf13q")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0, 0)
+mesh = SubResource("SphereMesh_dhjme")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 30.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="cleanup"]

@@ -23,8 +23,6 @@ var _remote_moving: bool = false
 var _remote_predicted_origin: Vector3
 
 func _ready() -> void:
-	push_warning("PlayerShip._ready: node=%s local_peer=%d owner=%d" % [name, multiplayer.get_unique_id(), get_multiplayer_authority()])
-	
 	target_pos = global_transform.origin
 	_last_sent_pos = global_transform.origin
 	_last_sent_vel = Vector3.ZERO
@@ -163,11 +161,6 @@ func set_remote_state(authoritative_transform: Transform3D, authoritative_vel: V
 	_remote_velocity = authoritative_vel
 	_remote_moving = authoritative_moving
 	_remote_predicted_origin = _remote_transform.origin + _remote_velocity * send_interval
-	
-	push_warning("%s.set_remote_state called on peer %d (owner=%d) pos=%s pred=%s vel=%s moving=%s"
-		% [name, multiplayer.get_unique_id(), get_multiplayer_authority(),
-		   str(_remote_transform.origin), str(_remote_predicted_origin),
-		   str(_remote_velocity), str(_remote_moving)])
 
 func _update_pivot_rotation_from_remote(remote_vel: Vector3, remote_moving: bool, delta: float = 0.0) -> void:
 	if not has_node("Pivot"):

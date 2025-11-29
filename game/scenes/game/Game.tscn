@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://obm26pf37jqd" path="res://scenes/game/RTSCamera.tscn" id="1_37nm4"]
 [ext_resource type="PackedScene" uid="uid://i63cnj8gkumo" path="res://scenes/game/WaterPlane.tscn" id="1_ikrn6"]
 [ext_resource type="Script" path="res://scripts/game/Game.gd" id="1_rrpba"]
-[ext_resource type="PackedScene" uid="uid://m1y7lrsq4xkf" path="res://scenes/game/PlayerShip.tscn" id="3_416h7"]
+[ext_resource type="PackedScene" uid="uid://m1y7lrsq4xkf" path="res://scenes/player/PlayerShip.tscn" id="3_416h7"]
 [ext_resource type="PackedScene" uid="uid://ccni3tahsnknh" path="res://ui/game/LobbyButton.tscn" id="4_yqfn5"]
 
 [node name="World" type="Node3D"]

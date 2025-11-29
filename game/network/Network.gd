@@ -209,7 +209,6 @@ func rpc_load_game(game_scene_path: String) -> void:
 func rpc_start_simulation() -> void:
 	simulation_started_flag = true
 	emit_signal("simulation_started")
-	push_warning("rpc_start_simulation: simulation_started_flag set on peer %d" % multiplayer.get_unique_id())
 
 @rpc("any_peer", "reliable")
 func _register_player(new_player_info: Dictionary) -> void:
@@ -227,7 +226,6 @@ func _register_player(new_player_info: Dictionary) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func rpc_spawn_player(spawn_peer_id: int, transform: Transform3D) -> void:
-	push_warning("[rpc_spawn_player] on peer %d -> spawn_peer=%d" % [multiplayer.get_unique_id(), spawn_peer_id])
 	spawn_local_player(spawn_peer_id, transform)
 
 func spawn_local_player(spawn_peer_id: int, transform: Transform3D) -> void:
@@ -276,7 +274,7 @@ func spawn_local_player(spawn_peer_id: int, transform: Transform3D) -> void:
 					 [desired_name, parent.name, multiplayer.get_unique_id(), spawn_peer_id])
 		return
 	
-	const player_scene_path := "res://scenes/game/PlayerShip.tscn"
+	const player_scene_path := "res://scenes/player/PlayerShip.tscn"
 	var PlayerShipScene: PackedScene = preload(player_scene_path)
 	var ship: Node = PlayerShipScene.instantiate() as Node
 	ship.name = desired_name
@@ -288,9 +286,6 @@ func spawn_local_player(spawn_peer_id: int, transform: Transform3D) -> void:
 	
 	parent.add_child(ship)
 	ship.global_transform = transform
-	
-	push_warning("spawn_local_player: instantiated %s under %s on peer %d (owner=%d)" %
-				 [ship.name, parent.name, multiplayer.get_unique_id(), spawn_peer_id])
 
 func _search_nodes_by_name_recursive(root: Node, name_to_find: String, out_array: Array) -> void:
 	if root.name == name_to_find:
@@ -325,7 +320,6 @@ func rpc_player_state(owner_peer_id: int, authoritative_transform: Transform3D, 
 		push_warning("rpc_player_state: Player node not found for id %d on peer %d (looking for %s)" % [owner_peer_id, multiplayer.get_unique_id(), node_name])
 		return
 	
-	push_warning("rpc_player_state: forwarding state for %s on peer %d" % [node_name, multiplayer.get_unique_id()])
 	if player_node.has_method("set_remote_state"):
 		player_node.call("set_remote_state", authoritative_transform, authoritative_vel, authoritative_moving)
 	else:

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbfrjsha8ixmc"]
+
+[ext_resource type="Script" path="res://scripts/player/Cannon.gd" id="1_a4ux5"]
+
+[node name="Cannon" type="Node3D"]
+script = ExtResource("1_a4ux5")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true

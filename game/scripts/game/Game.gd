@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var PlayerShipScene: PackedScene = preload("res://scenes/game/PlayerShip.tscn")
+@export var PlayerShipScene: PackedScene = preload("res://scenes/player/PlayerShip.tscn")
 const SPAWN_OFFSET := 4.0
 
 func _ready() -> void:
