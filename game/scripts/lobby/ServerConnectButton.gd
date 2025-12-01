@@ -1,6 +1,6 @@
 extends Button
 
-@onready var user_name_textbox: TextEdit = $"../TextEdit"
+@onready var user_name_textbox: LineEdit = $"../UsernameInput"
 @onready var user_label: Label = $"../UsernameLabel"
 
 func _on_pressed() -> void:

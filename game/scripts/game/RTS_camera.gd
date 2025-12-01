@@ -2,7 +2,7 @@ extends Node3D
 
 @export_range(0, 1000) var movement_speed: float = 5.0
 @export_range(0, 1000) var rotation_speed: float = 5.0
-@export_range(0, 1000, 0.1) var zoom_speed: float = 50.0
+@export_range(0, 1000, 0.1) var zoom_speed: float = 0.5
 @export_range(0, 1000) var min_zoom: float = 1.0
 @export_range(0, 1000) var max_zoom: float = 8.0
 @export_range(0, 90) var min_elevation_angle: float = 10.0
@@ -50,6 +50,10 @@ func handle_edge_movement(delta: float) -> void:
 	var viewport = get_viewport()
 	var mouse_pos = viewport.get_mouse_position()
 	var screen_rect = viewport.get_visible_rect()
+
+	if not screen_rect.has_point(mouse_pos):
+		return
+
 	var direction = Vector3.ZERO
 
 	if mouse_pos.x < edge_margin:

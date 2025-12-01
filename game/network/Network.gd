@@ -30,7 +30,6 @@ func _ready() -> void:
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
-
 func _get_best_local_ip() -> String:
 	var addrs := IP.get_local_addresses()
 	var ipv4_list: Array = []
@@ -47,7 +46,7 @@ func _get_best_local_ip() -> String:
 			ipv4_list.append(s)
 		else:
 			ipv6_list.append(s)
-
+	
 	# Preference order for IPv4 private ranges
 	# 192.168.x.x
 	for ip in ipv4_list:

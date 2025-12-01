@@ -19,11 +19,6 @@ config/icon="res://icon.svg"
 
 Network="*res://network/Network.gd"
 
-[display]
-
-window/size/viewport_width=1920
-window/size/viewport_height=1080
-
 [filesystem]
 
 import/fbx/enabled=false

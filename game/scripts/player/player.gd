@@ -1,12 +1,16 @@
 extends CharacterBody3D
 
 @export var speed: float = 1.0
-
 @export var send_interval: float = 0.05
 @export var send_pos_threshold: float = 0.02
 @export var interp_speed: float = 8.0
 @export var snap_threshold: float = 5.0
 @export var invert_facing: bool = false
+
+@onready var right_cannon: Node3D = $RightCannon
+@onready var left_cannon: Node3D  = $LeftCannon
+
+const CANNON_BALL = preload("res://scenes/player/CannonBall.tscn")
 
 var target_pos: Vector3
 var moving: bool = false
@@ -58,6 +62,12 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	var my_id: int = multiplayer.get_unique_id()
 	var my_authority: int = get_multiplayer_authority()
+	
+	# Trigger left/right shooting
+	if Input.is_action_just_pressed("shoot_right"):
+		_shoot_from_cannon(right_cannon)
+	if Input.is_action_just_pressed("shoot_left"):
+		_shoot_from_cannon(left_cannon)
 	
 	if my_id == my_authority:
 		_time_since_last_send += delta
@@ -189,3 +199,16 @@ func _update_pivot_rotation_from_remote(remote_vel: Vector3, remote_moving: bool
 func _lerp_angle(a: float, b: float, t: float) -> float:
 	var diff: float = fmod(b - a + PI, TAU) - PI
 	return a + diff * t
+
+func _shoot_from_cannon(cannon: Node3D) -> void:
+	var ball = CANNON_BALL.instantiate()
+	# Add to current scene root so physics and collisions work as expected
+	var scene_root = get_tree().current_scene
+	scene_root.add_child(ball)
+	# Place and align the cannonball to the cannon
+	ball.global_transform = cannon.global_transform
+	# send direction to the cannonball (use cannon's forward)
+	if ball.has_method("set_direction"):
+		# Godot's forward vector constant is Vector3.FORWARD (0,0,-1)
+		var forward = cannon.global_transform.basis * Vector3.FORWARD
+		ball.set_direction(forward.normalized())
