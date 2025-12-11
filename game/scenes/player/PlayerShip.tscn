@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://m1y7lrsq4xkf"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_av6ld"]
+[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_yla8k"]
 [ext_resource type="PackedScene" uid="uid://dveuujr8dipfx" path="res://assets/models/GLB/ship-small.glb" id="2_tmopf"]
 [ext_resource type="PackedScene" uid="uid://bbfrjsha8ixmc" path="res://scenes/player/Cannon.tscn" id="3_sykvp"]
 
@@ -8,7 +8,7 @@
 size = Vector3(0.200043, 0.470215, 0.481201)
 
 [node name="PlayerShip" type="CharacterBody3D"]
-script = ExtResource("1_av6ld")
+script = ExtResource("1_yla8k")
 
 [node name="Pivot" type="Node3D" parent="."]
 

@@ -26,6 +26,8 @@ var _remote_moving: bool = false
 # predicted (remote + velocity * lag)
 var _remote_predicted_origin: Vector3
 
+var _send_seq: int = 0
+
 func _ready() -> void:
 	target_pos = global_transform.origin
 	_last_sent_pos = global_transform.origin
@@ -155,13 +157,17 @@ func _send_state() -> void:
 		_time_since_last_send = 0.0
 		return
 	
+	_send_seq += 1
+	var ts := Time.get_ticks_msec()
 	var owner_id := get_multiplayer_authority()
 	var target_host := Network.host_id if Network.host_id != 0 else 1
-	Network.rpc_id(target_host, "rpc_player_state", owner_id, global_transform, velocity, moving)
+	
+	Network.rpc_id(target_host, "rpc_player_state", owner_id, global_transform, velocity, moving, ts, _send_seq)
 	
 	_last_sent_pos = global_transform.origin
 	_last_sent_vel = velocity
 	_time_since_last_send = 0.0
+
 
 func set_remote_state(authoritative_transform: Transform3D, authoritative_vel: Vector3, authoritative_moving: bool) -> void:
 	if multiplayer.get_unique_id() == get_multiplayer_authority():
@@ -202,13 +208,9 @@ func _lerp_angle(a: float, b: float, t: float) -> float:
 
 func _shoot_from_cannon(cannon: Node3D) -> void:
 	var ball = CANNON_BALL.instantiate()
-	# Add to current scene root so physics and collisions work as expected
 	var scene_root = get_tree().current_scene
 	scene_root.add_child(ball)
-	# Place and align the cannonball to the cannon
 	ball.global_transform = cannon.global_transform
-	# send direction to the cannonball (use cannon's forward)
 	if ball.has_method("set_direction"):
-		# Godot's forward vector constant is Vector3.FORWARD (0,0,-1)
 		var forward = cannon.global_transform.basis * Vector3.FORWARD
 		ball.set_direction(forward.normalized())
